@@ -331,7 +331,7 @@
                     "type": "webview",
                     "name": "Control",
                     "icon": "$(info)",
-                    "when": "digitaljs.view_isactive",
+                    "when": "digitaljs.view_isactive || digitaljs.synthview_isactive",
                     "contextualTitle": "DigitalJS Control"
                 }
             ]

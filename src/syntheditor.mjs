@@ -54,7 +54,7 @@ export class SynthEditorProvider {
         const circuit_view = new SynthCircuitView(this.#djs, panel, document);
         console.log("Initializing view!")
         await circuit_view.init();
-//        this.#djs.registerDocument(document, circuit_view);
+        this.#djs.registerSynthDocument(document, circuit_view);
         return;
     }
 

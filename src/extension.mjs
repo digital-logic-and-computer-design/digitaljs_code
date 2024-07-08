@@ -335,6 +335,143 @@ class DigitalJS {
             }
         }
     }
+
+    registerSynthDocument(document, circuit_view) {
+        vscode.commands.executeCommand('setContext', 'digitaljs.synthview_isactive', true);
+        vscode.commands.executeCommand('digitaljs-proj-status.focus');
+
+        //        vscode.commands.executeCommand('setContext', 'digitaljs.view_isfocus', false);
+
+        const listeners = [];
+        listeners.push(document.circuitUpdated(() => {
+            if (document !== this.#document)
+                return;
+            this.#processMarker({});
+        }));
+        listeners.push(document.tickUpdated((tick) => {
+            if (document !== this.#document)
+                return;
+            this.#tickUpdated.fire(tick);
+        }));
+        listeners.push(document.showMarker((editor_markers) => {
+            // No need to check if it's the current document
+            // Markers from other visible but not active views should be shown as well
+            // This can happen since mouse hovering doesn't switch focus by default.
+            // (of course this doesn't really work if we have more than one cursor
+            // but quite a few other things (like the mouse event tracking) doesn't work
+            // either...)
+            this.#processMarker(editor_markers);
+        }));
+        listeners.push(document.iopanelMessage((message) => {
+            if (document !== this.#document)
+                return;
+            this.#iopanelMessage.fire(message);
+        }));
+        listeners.push(document.runStatesUpdated((states) => {
+            if (document !== this.#document)
+                return;
+            this.#runStatesUpdated.fire(states);
+        }));
+
+        const post_switch = () => {
+            this.#synthOptionUpdated.fire();
+            this.#processMarker({});
+            this.#tickUpdated.fire(this.tick);
+            this.#iopanelMessage.fire({ command: 'iopanel:view', view: this.iopanelViews });
+            this.#runStatesUpdated.fire(this.runStates);
+        };
+
+        const link_view = (d, v) => {
+            const prev = this.#circuitView;
+            if (prev)
+                prev._djs_next_view = v;
+            this.#document = d;
+            this.#circuitView = v;
+            v._djs_prev_view = prev;
+            v._djs_next_view = undefined;
+        };
+        const unlink_view = (v) => {
+            const prev = v._djs_prev_view;
+            const next = v._djs_next_view;
+            v._djs_prev_view = undefined;
+            v._djs_next_view = undefined;
+            if (prev)
+                prev._djs_next_view = next;
+            if (next) {
+                next._djs_prev_view = prev;
+            }
+            else {
+                this.#document = prev ? prev.document : undefined;
+                this.#circuitView = prev;
+            }
+        };
+        const switch_document = (d, v) => {
+            if (this.#circuitView === v)
+                return;
+            // v may or may not be linked in yet, check that first before unlinking.
+            // v isn't the lates one so if it's linked in it must have a next.
+            if (v._djs_next_view)
+                unlink_view(v);
+            link_view(d, v);
+
+            post_switch();
+        };
+        let was_shown = false;
+        const on_view_state = () => {
+            const panel = circuit_view.panel;
+            const active = panel.active;
+            if (active) {
+                switch_document(document, circuit_view);
+                // Only switch to the digitaljs side panel
+                // if this is the first time we show this circuit
+                // or in general if the editor is shown as a result of a direct
+                // interaction between the user and our extension.
+                // In most cases the code that activate the editor will explicitly
+                // show the side panel though we can't do that when we are opening new files
+                // since the side panel might be hiden and can't be focused
+                // (when first circuit is shown).
+                // Therefore, we focus on our side panel on first show of the editor
+                // to cover this case...
+                if (!was_shown)
+                    vscode.commands.executeCommand('digitaljs-proj-files.focus');
+                was_shown = true;
+                vscode.commands.executeCommand('setContext', 'digitaljs.view_isfocus', true);
+            }
+            else if (this.#document === document) {
+                // Keep the last active document active in the side bars.
+                vscode.commands.executeCommand('setContext', 'digitaljs.view_isfocus', false);
+            }
+        };
+        circuit_view.onDidChangeViewState(on_view_state);
+        on_view_state();
+        // Make sure we links the new one in even if it's somehow hidden.
+        switch_document(document, circuit_view);
+        circuit_view.onDidDispose(() => {
+            if (document.luaTerminal) {
+                document.luaTerminal.dispose();
+                document.luaTerminal = undefined;
+            }
+            const uri = document.uri;
+            if (uri.scheme === 'untitled') {
+                const m = uri.path.match(/\/circuit-(\d*)\.digitaljs$/);
+                if (m) {
+                    this.#untitled_tracker.free(parseInt(m[1]));
+                }
+            }
+            for (const listener of listeners)
+                listener.dispose();
+            const was_active = this.#circuitView === circuit_view;
+            unlink_view(circuit_view);
+            if (was_active) {
+                post_switch();
+                vscode.commands.executeCommand('setContext', 'digitaljs.view_isfocus', false);
+            }
+            vscode.commands.executeCommand('setContext', 'digitaljs.view_isactive',
+                                           !!this.#circuitView);
+        });
+
+    }
+
     registerDocument(document, circuit_view) {
         vscode.commands.executeCommand('setContext', 'digitaljs.view_isactive', true);
 
