@@ -6,6 +6,7 @@ const path = require("path");
 const webpack = require('webpack');
 
 const outputDirectory = "dist";
+const devToolMode = "eval-source-map";
 
 function main_view_config(env, argv) {
     const devMode = argv.mode !== "production";
@@ -16,6 +17,7 @@ function main_view_config(env, argv) {
             path: path.join(__dirname, outputDirectory),
             filename: "view-bundle.js"
         },
+        devtool: devToolMode,
         module: {
             rules: [
                 {
@@ -58,6 +60,7 @@ function status_view_config(env, argv) {
             path: path.join(__dirname, outputDirectory),
             filename: "status_view.js"
         },
+        devtool: devToolMode,
         module: {
             rules: [
                 {
@@ -83,6 +86,7 @@ function synth_view_config(env, argv) {
             path: path.join(__dirname, outputDirectory),
             filename: "synth_view.js"
         },
+        devtool: devToolMode,
         plugins: [
         ],
     };
@@ -98,6 +102,7 @@ function digitaljs_worker_config(env, argv) {
             path: path.join(__dirname, outputDirectory),
             filename: "digitaljs-sym-worker.js"
         },
+        devtool: devToolMode,
         plugins: [
             new webpack.optimize.LimitChunkCountPlugin({
                 maxChunks: 1
@@ -120,6 +125,7 @@ function web_ext_config(env, argv) {
             libraryTarget: 'commonjs',
             devtoolModuleFilenameTemplate: '../../[resource-path]'
         },
+        devtool: devToolMode,
         resolve: {
             alias: {
                 path: require.resolve('path-browserify'),
@@ -164,6 +170,7 @@ function local_ext_config(env, argv) {
             libraryTarget: 'commonjs',
             devtoolModuleFilenameTemplate: '../../[resource-path]'
         },
+        devtool: devToolMode,
         module: {
             rules: [
             ]
