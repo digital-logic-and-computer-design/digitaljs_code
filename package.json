@@ -150,6 +150,16 @@
                     }
                 ],
                 "priority": "option"
+            },
+            {
+                "viewType": "digitaljs.circuitView_synthlogic",
+                "displayName": "DigitalJS",
+                "selector": [
+                    {
+                        "filenamePattern": "*.synthesizedlogic"
+                    }
+                ],
+                "priority": "default"
             }
         ],
         "menus": {

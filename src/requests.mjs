@@ -95,6 +95,14 @@ export async function run_yosys(files, options) {
     const yosys = new Yosys();
     await yosys.init();
     const obj = yosys.process_files(files, options);
+    return run_processed_yosys(obj, options);
+}
+
+export async function run_processed_yosys(obj, options) {
+    if(options === undefined) {
+        // TODO / Check
+        options = {};
+    }
     let output = yosys2digitaljs.yosys2digitaljs(obj, options);
     yosys2digitaljs.io_ui(output);
     if (options.transform)

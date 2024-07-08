@@ -6,6 +6,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { set_yosys_wasm_uri } from './requests.mjs';
 import { EditorProvider } from './editor.mjs';
+import { SynthEditorProvider } from './syntheditor.mjs';
 import { FilesView } from './files_view.mjs';
 import { LuaTerminal } from './lua_terminal.mjs';
 import { SynthProvider } from './synth_provider.mjs';
@@ -186,8 +187,8 @@ class DigitalJS {
 
         context.subscriptions.push(
             vscode.window.registerCustomEditorProvider(
-                EditorProvider.viewType,
-                new EditorProvider(this),
+                SynthEditorProvider.viewType,
+                new SynthEditorProvider(this),
                 {
                     webviewOptions: { retainContextWhenHidden: true },
                     supportsMultipleEditorsPerDocument: false,

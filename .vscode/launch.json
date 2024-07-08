@@ -9,10 +9,15 @@
 			"name": "Run Extension",
 			"type": "extensionHost",
 			"request": "launch",
+			"sourceMaps": true,
+			"trace": true,
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}"
-			]
-		},
+			],
+			"outFiles": [
+				"${workspaceFolder}/**/*.(c|j|m)js",
+				"!**/node_modules/**"
+			],		},
 		{
 			"name": "Extension Tests",
 			"type": "extensionHost",
