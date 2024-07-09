@@ -24,8 +24,6 @@ export class SynthDocument {
     // Events
     circuitUpdated
     #circuitUpdated // not fired for updates from main circuit views
-    documentEdited
-    #documentEdited
     #doc_uri 
     #data
     tickUpdated // from circuit view to other view
@@ -43,8 +41,6 @@ export class SynthDocument {
         this.#load(doc_uri, data);
         this.#circuitUpdated = new vscode.EventEmitter();
         this.circuitUpdated = this.#circuitUpdated.event;
-        this.#documentEdited = new vscode.EventEmitter();
-        this.documentEdited = this.#documentEdited.event;
         this.#tickUpdated = new vscode.EventEmitter();
         this.tickUpdated = this.#tickUpdated.event;
         this.#showMarker = new vscode.EventEmitter();
@@ -88,12 +84,6 @@ export class SynthDocument {
 
     #load(doc_uri, data) {
         this.#circuit = { devices: {}, connectors: [], subcircuits: {} };
-        // for (const fld of ['devices', 'connectors', 'subcircuits']) {
-        //     const v = data[fld];
-        //     if (v)
-        //         this.#circuit[fld] = v;
-        //     delete data[fld];
-        // }
         this.#last_circuit_changed = undefined;
     }
 
@@ -152,35 +142,13 @@ export class SynthDocument {
     #circuitEdit(after, label, new_circuit) {
         const before = this.#circuit;
         this.#circuit = after;
-        const changed = this.#createEdit(before, after, label, (circuit) => {
-            this.#circuit = circuit;
-            this.#last_circuit_changed = undefined;
-            this.#circuitUpdated.fire({ run: false, keep: !new_circuit });
-        });
         if (!changed) {
             this.#last_circuit_changed = undefined;
             return;
         }
         this.#last_circuit_changed = after;
     }
-    // Edits
-    #createEdit(before, after, label, cb) {
-        if (_.isEqual(before, after))
-            return false;
-        // We must not copy `after` here since the caller (in particular #circuitEdit)
-        // may mutate the object to merge in changes later.
-        this.#documentEdited.fire({
-            document: this,
-            label: label,
-            redo: () => {
-                cb(after);
-            },
-            undo: () => {
-                cb(before);
-            },
-        });
-        return true;
-    }
+
     #processAutoLayout(message) {
         // If some user action triggers the automatic layout of the circuit,
         // we want to merge the change of the layout to the edit that corresponds

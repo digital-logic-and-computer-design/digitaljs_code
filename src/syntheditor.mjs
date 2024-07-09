@@ -34,9 +34,6 @@ export class SynthEditorProvider {
         
         const data = JSON.parse(txt);
         const document = new SynthDocument(uri, data);                          
-        document.documentEdited(e => {
-            this.#onDidChangeCustomDocument.fire(e);
-        });
         return document;
     }
 
@@ -48,19 +45,5 @@ export class SynthEditorProvider {
         await circuit_view.init();
         this.#djs.registerSynthDocument(document, circuit_view);
         return;
-    }
-
-    async revertCustomDocument(document, _cancel) {
-        // Read only view / document
-    }
-
-    saveCustomDocument(document, _cancel) {
-        // Read only view / document
-        return false;
-    }
-
-    saveCustomDocumentAs(document, uri, _cancel) {
-        // Read only view / document
-        return false;
     }
 }

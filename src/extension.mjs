@@ -101,8 +101,6 @@ class DigitalJS {
                                                 "codicons", "dist", "codicon.css");
         this.simWorker = read_txt_file(vscode.Uri.joinPath(ext_uri, 'dist',
                                                            'digitaljs-sym-worker.js'));
-        set_yosys_wasm_uri(vscode.Uri.joinPath(ext_uri, "node_modules", "yosysjs",
-                                               "dist", "yosys.wasm"));
 
         this.#tickUpdated = new vscode.EventEmitter();
         this.tickUpdated = this.#tickUpdated.event;
@@ -131,15 +129,6 @@ class DigitalJS {
                                             () => vscode.commands.executeCommand(
                                                 'digitaljs-proj-files.focus')));
         context.subscriptions.push(
-            vscode.commands.registerCommand('digitaljs.openViewJSON',
-                                            (item) => this.#openViewJSON(item)));
-        context.subscriptions.push(
-            vscode.commands.registerCommand('digitaljs.addToViewSource',
-                                            (item) => this.#openViewSource(item)));
-        context.subscriptions.push(
-            vscode.commands.registerCommand('digitaljs.newViewSource',
-                                            (item) => this.#openViewSource(item, true)));
-        context.subscriptions.push(
             vscode.commands.registerCommand('digitaljs.revealCircuit',
                                             () => this.#revealCircuit()));
         context.subscriptions.push(
@@ -151,20 +140,8 @@ class DigitalJS {
                                             () => this.postPanelMessage({
                                                 command: 'startsim' })));
         context.subscriptions.push(
-            vscode.commands.registerCommand('digitaljs.newJSON',
-                                            () => this.#newJSON(this.doc_uri, false)));
-        context.subscriptions.push(
-            vscode.commands.registerCommand('digitaljs.addFiles',
-                                            () => this.#addFiles()));
-        context.subscriptions.push(
             vscode.commands.registerCommand('digitaljs.exportImage',
                                             () => this.#exportImage()));
-        context.subscriptions.push(
-            vscode.commands.registerCommand('digitaljs.showLuaTerminal',
-                                            () => this.#showLuaTerminal()));
-        context.subscriptions.push(
-            vscode.commands.registerCommand('digitaljs.removeSource',
-                                            (item) => this.#removeSource(item)));
         context.subscriptions.push(
             vscode.commands.registerCommand('digitaljs.startScript',
                                             (item) => this.#startScript(item)));
@@ -188,16 +165,6 @@ class DigitalJS {
             vscode.window.registerCustomEditorProvider(
                 SynthEditorProvider.viewType,
                 new SynthEditorProvider(this),
-                {
-                    webviewOptions: { retainContextWhenHidden: true },
-                    supportsMultipleEditorsPerDocument: false,
-                }
-        ));
-
-        context.subscriptions.push(
-            vscode.window.registerCustomEditorProvider(
-                EditorProvider.viewType_json,
-                new EditorProvider(this),
                 {
                     webviewOptions: { retainContextWhenHidden: true },
                     supportsMultipleEditorsPerDocument: false,
