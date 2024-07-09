@@ -236,7 +236,7 @@
         "svg-pan-zoom": "github:yuyichao/svg-pan-zoom",
         "util": "^0.12.4",
         "wavecanvas": "^1.1.0",
-        "yosys2digitaljs": "^0.6.0",
+        "yosys2digitaljs": "^0.8.0",
         "yosysjs": "github:yuyichao/yosysjs"
     }
 }
