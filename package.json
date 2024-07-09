@@ -188,6 +188,8 @@
         "lint": "eslint .",
         "pretest": "npm run lint",
         "test": "node ./test/runTest.js",
+        "prepackage": "npm run compile",
+        "package": "vsce package",
         "open-in-browser": "vscode-test-web --extensionDevelopmentPath=. ."
     },
     "devDependencies": {
