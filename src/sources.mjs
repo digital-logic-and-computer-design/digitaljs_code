@@ -206,9 +206,7 @@ export class Sources {
         this.#script_not_running = {};
     }
     #postLoad() {
-        console.log("postLoad")
         for (const uri_str in this.#map) {
-            console.log("postLoad", uri_str)
             const info = this.#map[uri_str];
             if (info.name)
                 this.#name_map[info.name] = info;

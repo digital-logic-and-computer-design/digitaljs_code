@@ -13,7 +13,6 @@ export class SynthEditorProvider {
     onDidChangeCustomDocument
     #onDidChangeCustomDocument
     constructor(djs) {
-        console.log("Creating Synth Editor!")
         this.#djs = djs;
         this.#onDidChangeCustomDocument = new vscode.EventEmitter();
         this.onDidChangeCustomDocument = this.#onDidChangeCustomDocument.event;
@@ -24,7 +23,6 @@ export class SynthEditorProvider {
     // }
 
     async openCustomDocument(uri, context, _cancel) {
-        console.log("Opening Custom Document!")
         let txt;
         if (context.untitledDocumentData) {
             txt = new TextDecoder().decode(context.untitledDocumentData);
@@ -35,10 +33,7 @@ export class SynthEditorProvider {
         }
         
         const data = JSON.parse(txt);
-        console.log("Data:")
-        console.dir(data)
         const document = new SynthDocument(uri, data);                          
-        console.dir(document)
         document.documentEdited(e => {
             this.#onDidChangeCustomDocument.fire(e);
         });
@@ -46,13 +41,10 @@ export class SynthEditorProvider {
     }
 
     async resolveCustomEditor(document, panel, _cancel) {
-        console.log("Resolving Custom Editor!")
         panel.webview.options = {
             enableScripts: true,
         };
-        console.log("Creating view!")
         const circuit_view = new SynthCircuitView(this.#djs, panel, document);
-        console.log("Initializing view!")
         await circuit_view.init();
         this.#djs.registerSynthDocument(document, circuit_view);
         return;

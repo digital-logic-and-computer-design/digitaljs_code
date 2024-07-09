@@ -25,15 +25,10 @@
         "simulation"
     ],
     "activationEvents": [
+        "onStartupFinished",
         "onCustomEditor:digitaljs.circuitView",
         "onCommand:digitaljs.openView",
-        "onCommand:digitaljs.openViewJSON",
-        "onCommand:digitaljs.addToViewSource",
-        "onCommand:digitaljs.newViewSource",
-        "onCommand:digitaljs.newJSON",
-        "onCommand:digitaljs.addFiles",
-        "onCommand:digitaljs.exportImage",
-        "onCommand:digitaljs.removeSource"
+        "onCommand:digitaljs.exportImage"
     ],
     "main": "./dist/local-extension.js",
     "browser": "./dist/web-extension.js",
@@ -48,24 +43,6 @@
             {
                 "command": "digitaljs.showPanel",
                 "title": "Show DigitalJS Panel",
-                "icon": "imgs/digitaljs.svg",
-                "category": "DigitalJS"
-            },
-            {
-                "command": "digitaljs.openViewJSON",
-                "title": "Open as circuit in DigitalJS",
-                "icon": "imgs/digitaljs.svg",
-                "category": "DigitalJS"
-            },
-            {
-                "command": "digitaljs.addToViewSource",
-                "title": "Add to DigitalJS",
-                "icon": "imgs/digitaljs.svg",
-                "category": "DigitalJS"
-            },
-            {
-                "command": "digitaljs.newViewSource",
-                "title": "Create circuit in DigitalJS",
                 "icon": "imgs/digitaljs.svg",
                 "category": "DigitalJS"
             },
@@ -88,69 +65,13 @@
                 "category": "DigitalJS"
             },
             {
-                "command": "digitaljs.newJSON",
-                "title": "New Circuit",
-                "icon": "$(new-file)",
-                "category": "DigitalJS"
-            },
-            {
-                "command": "digitaljs.addFiles",
-                "title": "Add Files",
-                "icon": "$(add)",
-                "category": "DigitalJS"
-            },
-            {
                 "command": "digitaljs.exportImage",
                 "title": "Export Circuit As Image",
                 "icon": "$(file-media)",
                 "category": "DigitalJS"
-            },
-            {
-                "command": "digitaljs.showLuaTerminal",
-                "title": "Show Lua Terminal",
-                "icon": "$(terminal)",
-                "category": "DigitalJS"
-            },
-            {
-                "command": "digitaljs.removeSource",
-                "title": "Remove",
-                "icon": "$(dash)",
-                "category": "DigitalJS"
-            },
-            {
-                "command": "digitaljs.stopScript",
-                "title": "Stop script",
-                "icon": "$(debug-stop)",
-                "category": "DigitalJS"
-            },
-            {
-                "command": "digitaljs.startScript",
-                "title": "Start script",
-                "icon": "$(debug-start)",
-                "category": "DigitalJS"
             }
         ],
         "customEditors": [
-            {
-                "viewType": "digitaljs.circuitView",
-                "displayName": "DigitalJS",
-                "selector": [
-                    {
-                        "filenamePattern": "*.digitaljs"
-                    }
-                ],
-                "priority": "default"
-            },
-            {
-                "viewType": "digitaljs.circuitView_json",
-                "displayName": "DigitalJS",
-                "selector": [
-                    {
-                        "filenamePattern": "*.json"
-                    }
-                ],
-                "priority": "option"
-            },
             {
                 "viewType": "digitaljs.circuitView_synthlogic",
                 "displayName": "DigitalJS",
@@ -173,18 +94,6 @@
                     "when": "false"
                 },
                 {
-                    "command": "digitaljs.openViewJSON",
-                    "when": "false"
-                },
-                {
-                    "command": "digitaljs.addToViewSource",
-                    "when": "false"
-                },
-                {
-                    "command": "digitaljs.newViewSource",
-                    "when": "false"
-                },
-                {
                     "command": "digitaljs.revealCircuit",
                     "when": "false"
                 },
@@ -197,50 +106,15 @@
                     "when": "false"
                 },
                 {
-                    "command": "digitaljs.addFiles",
-                    "when": "false"
-                },
-                {
                     "command": "digitaljs.exportImage",
-                    "when": "false"
-                },
-                {
-                    "command": "digitaljs.showLuaTerminal",
-                    "when": "false"
-                },
-                {
-                    "command": "digitaljs.removeSource",
-                    "when": "false"
-                },
-                {
-                    "command": "digitaljs.stopScript",
-                    "when": "false"
-                },
-                {
-                    "command": "digitaljs.startScript",
                     "when": "false"
                 }
             ],
             "view/title": [
                 {
-                    "command": "digitaljs.newJSON",
-                    "when": "view == digitaljs-proj-files",
-                    "group": "navigation@0"
-                },
-                {
-                    "command": "digitaljs.addFiles",
-                    "when": "view == digitaljs-proj-files",
-                    "group": "navigation@1"
-                },
-                {
                     "command": "digitaljs.exportImage",
                     "when": "view == digitaljs-proj-files",
                     "group": "navigation@2"
-                },
-                {
-                    "command": "digitaljs.showLuaTerminal",
-                    "when": "view == digitaljs-proj-files",
-                    "group": "navigation@3"
                 }
             ],
             "editor/title": [
@@ -263,40 +137,6 @@
                     "command": "digitaljs.start",
                     "when": "digitaljs.view_isfocus && digitaljs.view_hascircuit && !digitaljs.view_running",
                     "group": "navigation@1"
-                }
-            ],
-            "explorer/context": [
-                {
-                    "command": "digitaljs.openViewJSON",
-                    "when": "resourceExtname == .json || resourceExtname == .digitaljs",
-                    "group": "navigation@99999"
-                },
-                {
-                    "command": "digitaljs.addToViewSource",
-                    "when": "digitaljs.view_isactive && resourceExtname =~ /^\\.sv$|^\\.v$|^\\.vh$|^\\.lua$/",
-                    "group": "navigation@99999"
-                },
-                {
-                    "command": "digitaljs.newViewSource",
-                    "when": "resourceExtname =~ /^\\.sv$|^\\.v$|^\\.vh$|^\\.lua$/",
-                    "group": "navigation@100000"
-                }
-            ],
-            "view/item/context": [
-                {
-                    "command": "digitaljs.removeSource",
-                    "when": "view == digitaljs-proj-files && viewItem != root-circuit",
-                    "group": "inline"
-                },
-                {
-                    "command": "digitaljs.startScript",
-                    "when": "view == digitaljs-proj-files && viewItem in digitaljs.script_not_running",
-                    "group": "inline"
-                },
-                {
-                    "command": "digitaljs.stopScript",
-                    "when": "view == digitaljs-proj-files && viewItem in digitaljs.script_running",
-                    "group": "inline"
                 }
             ]
         },

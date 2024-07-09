@@ -15,7 +15,6 @@ import { read_txt_file, write_txt_file, file_exist } from './utils.mjs';
 import { extension_formats } from '../lib/image_formats.mjs';
 
 export function activate(context) {
-    console.log("Activate: Making DigitalJS");
     new DigitalJS(context);
 }
 

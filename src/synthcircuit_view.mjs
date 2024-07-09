@@ -26,7 +26,6 @@ export class SynthCircuitView {
             this.#processCommand(djs, msg);
         });
         let circuit_listener = this.#document.circuitUpdated(opts => {
-            console.log("Circuit updated!")
             this.#showCircuit({ ...opts, pause: false });
             this.reveal();
         });
