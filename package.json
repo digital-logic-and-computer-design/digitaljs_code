@@ -2,9 +2,9 @@
     "name": "digitaljs",
     "displayName": "DigitalJS",
     "description": "DigitalJS integration for VS Code",
-    "version": "0.7.3",
+    "version": "0.7.4",
     "license": "SEE LICENSE IN LICENSE",
-    "publisher": "yuyichao",
+    "publisher": "yuyichao / bsiever (updates)",
     "repository": {
         "type": "git",
         "url": "https://github.com/yuyichao/digitaljs_code.git"
@@ -182,7 +182,7 @@
         "compile": "npm-run-all compile:*",
         "compile:views": "webpack --mode production",
         "watch": "npm-run-all watch:*",
-        "watch:webpack": "webpack --watch --mode development --devtool eval-source-map",
+        "watch:webpack": "webpack --watch --mode development --devtool source-map",
         "watch-prod": "npm-run-all watch-prod:*",
         "watch-prod:webpack": "webpack --watch --mode production",
         "lint": "eslint .",

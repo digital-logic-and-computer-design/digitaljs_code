@@ -6,7 +6,7 @@ const path = require("path");
 const webpack = require('webpack');
 
 const outputDirectory = "dist";
-const devToolMode = "eval-source-map";
+const devToolMode = "source-map";
 
 function main_view_config(env, argv) {
     const devMode = argv.mode !== "production";

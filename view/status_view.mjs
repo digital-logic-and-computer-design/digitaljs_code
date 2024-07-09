@@ -70,6 +70,7 @@ class Status {
     #fast_forward_btn
     #single_step_btn
     #next_event_btn
+    #saveimg_btn
     constructor() {
         window.addEventListener('message', event => this.#processMessage(event));
         window.addEventListener("load", () => this.#initialize());
@@ -85,6 +86,7 @@ class Status {
         this.#fast_forward_btn = $('#fast-forward-sim');
         this.#single_step_btn = $('#single-step-sim');
         this.#next_event_btn = $('#next-event-sim');
+        this.#saveimg_btn = $('#saveimg');
         const btn_cmd = (btn, panel_cmd) => {
             btn.click(() => {
                 vscode.postMessage({ command: 'panel-cmd', panel_cmd });
@@ -95,6 +97,9 @@ class Status {
         btn_cmd(this.#fast_forward_btn, 'fastforwardsim');
         btn_cmd(this.#single_step_btn, 'singlestepsim');
         btn_cmd(this.#next_event_btn, 'nexteventsim');
+        this.#saveimg_btn.click(() => {
+            vscode.postMessage({ command: 'exportimage'});
+        });
 
         // Release the messages from the main extension
         vscode.postMessage({ command: 'initialized' });

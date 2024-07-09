@@ -3,7 +3,7 @@
 'use strict';
 
 import { WebviewMsgQueue } from './webview_msg_queue.mjs';
-
+import vscode from 'vscode';
 export class StatusProvider {
     #djs
     constructor(djs) {
@@ -29,7 +29,10 @@ export class StatusProvider {
                 case 'panel-cmd':
                     this.#djs.postPanelMessage({ command: msg.panel_cmd });
                     return;
-            }
+                case 'exportimage':
+                  vscode.commands.executeCommand('digitaljs.exportImage');
+                  return;
+              }
         });
         const listeners = [];
         listeners.push(this.#djs.tickUpdated(async (tick) => {
@@ -88,6 +91,10 @@ export class StatusProvider {
     <vscode-button id="next-event-sim" appearance="icon" title="Run until next event"
                    ${enabled(!rs.running && rs.pendingEvents)}>
       <i class="codicon codicon-debug-continue"></i>
+    </vscode-button>
+    <vscode-button id="saveimg" appearance="icon" title="Save Image" style="float: right;"
+                   ${enabled(true)}>
+      <i class="codicon codicon-file-media"></i>
     </vscode-button>
   </div>
   <div style="flex-grow:0;flex-shrink:0;;margin-bottom:2px">
