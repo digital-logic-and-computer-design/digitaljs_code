@@ -142,10 +142,6 @@ export class SynthDocument {
     #circuitEdit(after, label, new_circuit) {
         const before = this.#circuit;
         this.#circuit = after;
-        if (!changed) {
-            this.#last_circuit_changed = undefined;
-            return;
-        }
         this.#last_circuit_changed = after;
     }
 
