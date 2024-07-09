@@ -115,7 +115,7 @@ export class SynthCircuitView {
 <div id="grid">
   <div id="paper"></div>
   <div id="gutter_vert" class="gutter gutter-vertical"></div>
-  <div id="monitorbox">
+  <div id="monitorbox" style="min-height: 150px;">
     <div style="margin-bottom:3px">
       <vscode-button appearance="icon" name="ppt_up" title="Increase pixels per tick" disabled style="vertical-align: middle;"><i class="codicon codicon-add"></i></vscode-button>
       <vscode-button appearance="icon" name="ppt_down" title="Decrease pixels per tick" disabled style="vertical-align: middle;"><i class="codicon codicon-dash"></i></vscode-button>
@@ -135,6 +135,7 @@ export class SynthCircuitView {
       </vscode-text-field>
     </div>
     <div id="monitor">
+    stuff
     </div>
   </div>
 </div>

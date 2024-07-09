@@ -114,7 +114,7 @@ export class MonitorView extends Backbone.View {
     initialize(args) {
         this._width = 800;
         this._settings = extendSettings(defaultSettings,
-                                        { start: 0, pixelsPerTick: 5, gridStep: 1,
+                                        { start: 0, pixelsPerTick: 1, gridStep: 1,
                                           textColor: this.$el.css('--foreground') });
         this._settingsFor = new Map();
         this._live = true;
