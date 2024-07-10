@@ -2,7 +2,7 @@
     "name": "digitaljs",
     "displayName": "DigitalJS",
     "description": "DigitalJS integration for VS Code",
-    "version": "0.7.4",
+    "version": "0.7.5",
     "license": "SEE LICENSE IN LICENSE",
     "publisher": "yuyichao / bsiever (updates)",
     "repository": {
@@ -77,7 +77,7 @@
                 "displayName": "DigitalJS",
                 "selector": [
                     {
-                        "filenamePattern": "*.synthesizedlogic"
+                        "filenamePattern": "*.rtl.json"
                     }
                 ],
                 "priority": "default"
