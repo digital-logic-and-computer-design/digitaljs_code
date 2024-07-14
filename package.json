@@ -4,7 +4,7 @@
     "description": "DigitalJS integration for VS Code",
     "version": "0.7.5",
     "license": "SEE LICENSE IN LICENSE",
-    "publisher": "yuyichao / bsiever (updates)",
+    "publisher": "bsiever",
     "repository": {
         "type": "git",
         "url": "https://github.com/yuyichao/digitaljs_code.git"
