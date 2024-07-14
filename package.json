@@ -2,7 +2,7 @@
     "name": "digitaljs",
     "displayName": "DigitalJS",
     "description": "DigitalJS integration for VS Code",
-    "version": "0.7.5",
+    "version": "0.7.6",
     "license": "SEE LICENSE IN LICENSE",
     "publisher": "bsiever",
     "repository": {
@@ -27,25 +27,12 @@
     "activationEvents": [
         "onStartupFinished",
         "onCustomEditor:digitaljs.circuitView",
-        "onCommand:digitaljs.openView",
         "onCommand:digitaljs.exportImage"
     ],
     "main": "./dist/local-extension.js",
     "browser": "./dist/web-extension.js",
     "contributes": {
         "commands": [
-            {
-                "command": "digitaljs.openView",
-                "title": "Open DigitalJS",
-                "icon": "imgs/digitaljs.svg",
-                "category": "DigitalJS"
-            },
-            {
-                "command": "digitaljs.showPanel",
-                "title": "Show DigitalJS Panel",
-                "icon": "imgs/digitaljs.svg",
-                "category": "DigitalJS"
-            },
             {
                 "command": "digitaljs.revealCircuit",
                 "title": "Show active circuit",
@@ -86,14 +73,6 @@
         "menus": {
             "commandPalette": [
                 {
-                    "command": "digitaljs.openView",
-                    "when": "false"
-                },
-                {
-                    "command": "digitaljs.showPanel",
-                    "when": "false"
-                },
-                {
                     "command": "digitaljs.revealCircuit",
                     "when": "false"
                 },
@@ -119,16 +98,6 @@
             ],
             "editor/title": [
                 {
-                    "command": "digitaljs.openView",
-                    "when": "!digitaljs.view_isfocus",
-                    "group": "navigation"
-                },
-                {
-                    "command": "digitaljs.showPanel",
-                    "when": "digitaljs.view_isfocus",
-                    "group": "navigation@0"
-                },
-                {
                     "command": "digitaljs.pause",
                     "when": "digitaljs.view_isfocus && digitaljs.view_hascircuit && digitaljs.view_running",
                     "group": "navigation@1"
@@ -151,21 +120,6 @@
         },
         "views": {
             "digitaljs-container": [
-                {
-                    "id": "digitaljs-proj-files",
-                    "name": "Files",
-                    "icon": "$(files)",
-                    "when": "digitaljs.view_isactive",
-                    "contextualTitle": "DigitalJS Files"
-                },
-                {
-                    "id": "digitaljs-proj-synth",
-                    "type": "webview",
-                    "name": "Synthesis",
-                    "icon": "$(gear)",
-                    "when": "digitaljs.view_isactive",
-                    "contextualTitle": "DigitalJS Synthesis"
-                },
                 {
                     "id": "digitaljs-proj-status",
                     "type": "webview",

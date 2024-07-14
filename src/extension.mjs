@@ -7,7 +7,6 @@ import * as path from 'path';
 import { set_yosys_wasm_uri } from './requests.mjs';
 import { EditorProvider } from './editor.mjs';
 import { SynthEditorProvider } from './syntheditor.mjs';
-import { FilesView } from './files_view.mjs';
 import { LuaTerminal } from './lua_terminal.mjs';
 import { SynthProvider } from './synth_provider.mjs';
 import { StatusProvider } from './status_provider.mjs';
@@ -79,7 +78,6 @@ class DigitalJS {
     #runStatesUpdated
     #synthOptionUpdated
     #circuitView
-    #filesView
     #editor_markers = {}
     #untitled_tracker
     #pendingSources = []
@@ -122,13 +120,6 @@ class DigitalJS {
         context.subscriptions.push(this.highlightDecoType);
 
         context.subscriptions.push(
-            vscode.commands.registerCommand('digitaljs.openView',
-                                            () => this.#openView()));
-        context.subscriptions.push(
-            vscode.commands.registerCommand('digitaljs.showPanel',
-                                            () => vscode.commands.executeCommand(
-                                                'digitaljs-proj-files.focus')));
-        context.subscriptions.push(
             vscode.commands.registerCommand('digitaljs.revealCircuit',
                                             () => this.#revealCircuit()));
         context.subscriptions.push(
@@ -157,10 +148,7 @@ class DigitalJS {
                                                       new StatusProvider(this),
                                                       { webviewOptions: {
                                                           retainContextWhenHidden: true }}));
-        this.#filesView = new FilesView(this);
-        context.subscriptions.push(
-            vscode.window.registerTreeDataProvider('digitaljs-proj-files', this.#filesView));
-
+        
         context.subscriptions.push(
             vscode.window.registerCustomEditorProvider(
                 SynthEditorProvider.viewType,
@@ -185,7 +173,6 @@ class DigitalJS {
     }
     dispose() {
         this.#document.dispose();
-        this.#filesView.dispose();
     }
 
     get doc_id() {
@@ -384,10 +371,15 @@ class DigitalJS {
         };
         let was_shown = false;
         const on_view_state = () => {
+            console.log("On view state change");
             const panel = circuit_view.panel;
             const active = panel.active;
+            console.log("active:"+active);
             if (active) {
                 switch_document(document, circuit_view);
+                vscode.commands.executeCommand('setContext', 'digitaljs.synthview_isactive', true);
+                vscode.commands.executeCommand('digitaljs-proj-status.focus');
+
                 // Only switch to the digitaljs side panel
                 // if this is the first time we show this circuit
                 // or in general if the editor is shown as a result of a direct
@@ -398,14 +390,11 @@ class DigitalJS {
                 // (when first circuit is shown).
                 // Therefore, we focus on our side panel on first show of the editor
                 // to cover this case...
-                if (!was_shown)
-                    vscode.commands.executeCommand('digitaljs-proj-files.focus');
-                was_shown = true;
-                vscode.commands.executeCommand('setContext', 'digitaljs.view_isfocus', true);
+  //              vscode.commands.executeCommand('setContext', 'digitaljs.view_isfocus', true);
             }
             else if (this.#document === document) {
                 // Keep the last active document active in the side bars.
-                vscode.commands.executeCommand('setContext', 'digitaljs.view_isfocus', false);
+//                vscode.commands.executeCommand('setContext', 'digitaljs.view_isfocus', false);
             }
         };
         circuit_view.onDidChangeViewState(on_view_state);
@@ -542,9 +531,6 @@ class DigitalJS {
                 // (when first circuit is shown).
                 // Therefore, we focus on our side panel on first show of the editor
                 // to cover this case...
-                if (!was_shown)
-                    vscode.commands.executeCommand('digitaljs-proj-files.focus');
-                was_shown = true;
                 vscode.commands.executeCommand('setContext', 'digitaljs.view_isfocus', true);
             }
             else if (this.#document === document) {
@@ -781,7 +767,6 @@ class DigitalJS {
     async #openViewSource(uri, force_new) {
         if (this.#circuitView && !force_new) {
             this.#circuitView.reveal();
-            vscode.commands.executeCommand('digitaljs-proj-files.focus');
             this.#document.addSources([uri]);
         }
         else {
@@ -803,7 +788,6 @@ class DigitalJS {
         const uri = active_editor_uri();
         const new_or_active = () => {
             if (this.#circuitView) {
-                vscode.commands.executeCommand('digitaljs-proj-files.focus');
                 return this.#circuitView.reveal();
             }
             this.#newJSON(uri, true);
@@ -815,7 +799,6 @@ class DigitalJS {
         // If we have this open as circuit already, switch to it.
         const exist_view = this.#findViewByURI(uri);
         if (exist_view) {
-            vscode.commands.executeCommand('digitaljs-proj-files.focus');
             return exist_view.reveal();
         }
         const ext = path.extname(uri.path);
@@ -834,7 +817,6 @@ class DigitalJS {
                 return this.#openViewJSON(uri);
             // Check circuitView again in case it was just closed
             if (new_circuit && this.#circuitView) {
-                vscode.commands.executeCommand('digitaljs-proj-files.focus');
                 return this.#circuitView.reveal();
             }
             return this.#newJSON(uri, false);
@@ -842,7 +824,6 @@ class DigitalJS {
         else if (['.sv', '.v', '.vh', '.lua'].includes(ext)) {
             // Source file already in current document.
             if (this.#document && this.#document.sources.findByURI(uri)) {
-                vscode.commands.executeCommand('digitaljs-proj-files.focus');
                 return this.#circuitView.reveal();
             }
             if (this.#circuitView) {
