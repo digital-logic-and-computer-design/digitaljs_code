@@ -1,13 +1,13 @@
 {
-    "name": "digitaljs",
+    "name": "digitaljs-dlacd",
     "displayName": "DigitalJS",
     "description": "DigitalJS integration for VS Code",
-    "version": "0.7.6",
+    "version": "0.7.7",
     "license": "SEE LICENSE IN LICENSE",
     "publisher": "bsiever",
     "repository": {
         "type": "git",
-        "url": "https://github.com/yuyichao/digitaljs_code.git"
+        "url": "https://github.com/digital-logic-and-computer-design/vscode-edacation"
     },
     "engines": {
         "vscode": "^1.62.0"
